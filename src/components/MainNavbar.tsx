@@ -36,10 +36,10 @@ export default function MainNavbar() {
 
     const navItems = [
         { name: "Home", href: "/" },
-        { name: "Tricket", href: "/trickets" },
+        { name: "Ticket", href: "/tickets" },
     ];
     const navItemsMobile = [
-        { name: "Tricket", href: "/trickets", images: "https://www.svgrepo.com/show/488420/ticket.svg" },
+        { name: "Ticket", href: "/tickets", images: "https://www.svgrepo.com/show/488420/ticket.svg" },
         { name: "Home", href: "/", images: "https://www.svgrepo.com/show/61237/home-icon-silhouette.svg" },
         { name: "Profile", href: "/profile", images: "https://www.svgrepo.com/show/491108/profile.svg" },
     ];
