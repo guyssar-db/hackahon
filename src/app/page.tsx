@@ -106,9 +106,9 @@ export default function Home() {
 
                                     <h1 className="text-md font-bold text-center line-clamp-2">{event.title}</h1>
                                     <div className="w-full">
-                                    <p className=" flex justify-start text-sm  text-gray-600  w-full line-clamp-1">
-                                      <MapPinIcon width={20} />  {event.location.venue}
-                                    </p>
+                                        <p className=" flex justify-start text-sm  text-gray-600  w-full line-clamp-1">
+                                            <MapPinIcon width={20} />  {event.location.venue}
+                                        </p>
                                     </div>
 
                                 </div>
