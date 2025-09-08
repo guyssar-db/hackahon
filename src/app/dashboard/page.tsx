@@ -1,12 +1,7 @@
-import LayoutAdmin from "@/layouts/LayoutAdmin";
+// export default async function ShopPage() {
+//     return <div>Overview</div>;
+// }
 
-export default async function ShopPage() {
-    return (
-        <>
-            <LayoutAdmin>
-                <p>UI </p>
-            </LayoutAdmin>
-
-        </>
-    )
+export default function OverviewPage() {
+    return <div className="text-xl font-semibold">Overview</div>;
 }

@@ -1,31 +1,17 @@
+// src\components\ui\EventList.tsx
 'use client'
-
-import { FunnelIcon } from '@heroicons/react/16/solid'
 import { useState } from 'react'
+import { FunnelIcon } from '@heroicons/react/16/solid'
 
-interface Event {
+export interface Event {
   id: string
   title: string
   description: string
   category: string
-  location: {
-    type: string
-    venue: string
-  }
-  schedule: {
-    startDate: string
-    endDate: string
-  }
-  pricing: {
-    currency: string
-    vip?: number
-    premium?: number
-    general?: number
-    student?: number
-  }
-  images: {
-    thumbnail: string
-  }
+  location: { type: string; venue: string }
+  schedule: { startDate: string; endDate: string }
+  pricing: { currency: string; vip?: number; premium?: number; general?: number; student?: number }
+  images: { thumbnail: string }
 }
 
 interface Props {
@@ -56,7 +42,6 @@ export default function EventList({ initialEvents }: Props) {
         const vals = Object.values(pricing).filter(p => typeof p === 'number' && p > 0) as number[]
         return vals.length > 0 ? Math.min(...vals) : 0
       }
-
       if (sort === 'date-asc') return new Date(a.schedule.startDate).getTime() - new Date(b.schedule.startDate).getTime()
       if (sort === 'date-desc') return new Date(b.schedule.startDate).getTime() - new Date(a.schedule.startDate).getTime()
       if (sort === 'price-asc') return getMinPrice(a.pricing) - getMinPrice(b.pricing)
@@ -127,19 +112,15 @@ export default function EventList({ initialEvents }: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredEvents.map(event => {
             const prices = Object.values(event.pricing).filter(p => typeof p === 'number' && p > 0) as number[]
-            if (prices.length === 0) return null
-
+            if (!prices.length) return null
             const min = Math.min(...prices)
             const max = Math.max(...prices)
             const priceText = min === max ? `${min.toLocaleString()} ${event.pricing.currency}` : `${min.toLocaleString()} - ${max.toLocaleString()} ${event.pricing.currency}`
-
             return (
               <div key={event.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                <img src={event.images?.thumbnail} alt={event.title} className="w-full h-40 object-cover" />
+                <img src={event.images.thumbnail} alt={event.title} className="w-full h-40 object-cover" />
                 <div className="p-4">
-                  <p className="text-gray-500 text-sm">
-                    {new Date(event.schedule.startDate).toLocaleDateString()} - {new Date(event.schedule.endDate).toLocaleDateString()}
-                  </p>
+                  <p className="text-gray-500 text-sm">{new Date(event.schedule.startDate).toLocaleDateString()} - {new Date(event.schedule.endDate).toLocaleDateString()}</p>
                   <h2 className="text-lg font-bold">{event.title}</h2>
                   <p className="text-gray-600 text-sm">{event.location.venue}</p>
                   <p className="mt-2 text-blue-600 font-semibold">{priceText}</p>
