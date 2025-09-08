@@ -367,13 +367,11 @@
           "available": 2659
         },
         "images": {
-          "banner": "https://example.com/images/cultural-festival-banner.jpg",
-          "thumbnail": "https://example.com/images/cultural-festival-thumb.jpg",
+          "banner": "https://unsplash.com/photos/a-group-of-people-that-are-standing-in-the-grass-L1a4ZSdbZPg",
+          "thumbnail": "https://unsplash.com/photos/people-in-yellow-and-white-robe-walking-on-street-during-daytime-bAPLPXdKKK8",
           "gallery": [
-            "https://example.com/images/cultural-1.jpg",
-            "https://example.com/images/cultural-2.jpg",
-            "https://example.com/images/cultural-3.jpg",
-            "https://example.com/images/cultural-4.jpg"
+            "https://unsplash.com/photos/a-group-of-people-walking-down-a-street-next-to-a-lush-green-field-f7pQuPm11vc",
+            "https://unsplash.com/photos/a-group-of-people-that-are-standing-in-the-grass-L1a4ZSdbZPg"
           ]
         },
         "tags": [
