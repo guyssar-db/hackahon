@@ -25,6 +25,7 @@ export interface Category {
 }
 
 export interface Event {
+    name: ReactNode;
     id: string;
     title: string;
     description: string;

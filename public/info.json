@@ -299,10 +299,10 @@
           "available": 6544
         },
         "images": {
-          "banner": "https://example.com/images/marathon-banner.jpg",
-          "thumbnail": "https://example.com/images/marathon-thumb.jpg",
+          "banner": "https://unsplash.com/photos/white-robot-near-brown-wall-2EJCSULRwC8",
+          "thumbnail": "https://unsplash.com/photos/3d-illustration-computer-chip-a-processor-on-a-printed-circuit-board-the-concept-of-data-transfer-to-the-cloud-central-processor-in-the-form-of-artificial-intelligence-data-transfer-g6Nom1uBz6M",
           "gallery": [
-            "https://example.com/images/marathon-1.jpg",
+            "https://unsplash.com/photos/a-white-robot-holding-a-tablet-in-its-hand-nzVztZUZ3YI",
             "https://example.com/images/marathon-2.jpg"
           ]
         },
