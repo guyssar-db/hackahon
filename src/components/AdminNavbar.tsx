@@ -25,20 +25,25 @@ const navigation = [
     { name: 'Overview', href: '/dashboard', icon: HomeIcon, current: true },
     {
         name: 'User Management',
-        href: '/dashboard/user/123',
+        href: '/dashboard/user',
         icon: UsersIcon,
         current: false,
     },
-    { name: 'Booking Timeline', href: '#', icon: CalendarIcon, current: false },
     {
-        name: 'Event Performance',
-        href: '#',
+        name: 'Booking',
+        href: '/dashboard/booking',
+        icon: CalendarIcon,
+        current: false,
+    },
+    {
+        name: 'Events',
+        href: '/dashboard/',
         icon: ChartPieIcon,
         current: false,
     },
     {
         name: 'Trickets',
-        href: '#',
+        href: '/dashboard/',
         icon: DocumentDuplicateIcon,
         current: false,
     },
@@ -52,7 +57,7 @@ function classNames(...classes: string[]) {
 
 export default function AdminNavbar() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const path = usePathname();
+    const pathname = usePathname();
 
     return (
         <>
@@ -89,30 +94,33 @@ export default function AdminNavbar() {
                                     role="list"
                                     className="flex flex-1 flex-col gap-y-3 pt-20"
                                 >
-                                    {navigation.map((item) => (
-                                        <li key={item.name}>
-                                            <a
-                                                href={item.href}
-                                                className={classNames(
-                                                    item.current
-                                                        ? 'bg-white/5 text-white'
-                                                        : 'text-gray-400 hover:bg-white/5 hover:text-white',
-                                                    'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
-                                                )}
-                                            >
-                                                <item.icon
-                                                    aria-hidden="true"
+                                    {navigation.map((item) => {
+                                        const isActive = pathname === item.href;
+                                        return (
+                                            <li key={item.name}>
+                                                <a
+                                                    href={item.href}
                                                     className={classNames(
-                                                        item.current
-                                                            ? 'text-white'
-                                                            : 'text-gray-400 group-hover:text-white',
-                                                        'size-6 shrink-0',
+                                                        isActive
+                                                            ? 'bg-white/5 text-white'
+                                                            : 'text-gray-400 hover:bg-white/5 hover:text-white',
+                                                        'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
                                                     )}
-                                                />
-                                                {item.name}
-                                            </a>
-                                        </li>
-                                    ))}
+                                                >
+                                                    <item.icon
+                                                        aria-hidden="true"
+                                                        className={classNames(
+                                                            isActive
+                                                                ? 'text-white'
+                                                                : 'text-gray-400 group-hover:text-white',
+                                                            'size-6 shrink-0',
+                                                        )}
+                                                    />
+                                                    {item.name}
+                                                </a>
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             </nav>
                         </div>
@@ -128,30 +136,34 @@ export default function AdminNavbar() {
                             role="list"
                             className="flex flex-1 flex-col gap-y-3 pt-20"
                         >
-                            {navigation.map((item) => (
-                                <li key={item.name}>
-                                    <Link
-                                        href={item.href}
-                                        className={classNames(
-                                            item.current
-                                                ? 'bg-white/5 text-white'
-                                                : 'text-gray-400 hover:bg-white/5 hover:text-white',
-                                            'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
-                                        )}
-                                    >
-                                        <item.icon
-                                            aria-hidden="true"
+                            {navigation.map((item) => {
+                                const isActive = pathname === item.href;
+
+                                return (
+                                    <li key={item.name}>
+                                        <Link
+                                            href={item.href}
                                             className={classNames(
-                                                item.current
-                                                    ? 'text-white'
-                                                    : 'text-gray-400 group-hover:text-white',
-                                                'size-6 shrink-0',
+                                                isActive
+                                                    ? 'bg-white/5 text-white'
+                                                    : 'text-gray-400 hover:bg-white/5 hover:text-white',
+                                                'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
                                             )}
-                                        />
-                                        {item.name}
-                                    </Link>
-                                </li>
-                            ))}
+                                        >
+                                            <item.icon
+                                                aria-hidden="true"
+                                                className={classNames(
+                                                    isActive
+                                                        ? 'text-white'
+                                                        : 'text-gray-400 group-hover:text-white',
+                                                    'size-6 shrink-0',
+                                                )}
+                                            />
+                                            {item.name}
+                                        </Link>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </nav>
                 </div>
