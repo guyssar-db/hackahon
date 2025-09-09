@@ -44,8 +44,8 @@ export default function EventTable() {
   return (
     <>
     <p>History Post Event</p>
-    <div className="flex items-center justify-center h-[70vh]">
-      <div className="overflow-x-auto">
+    <div className="flex flex-col items-center justify-center">
+      <div className="overflow-x-scroll overflow-hidden hide-scrollbar">
         <table className="w-full bg-white shadow-md rounded-lg border border-gray-200">
           <thead>
             <tr className="border-b">
@@ -81,6 +81,7 @@ export default function EventTable() {
           </tbody>
         </table>
 
+      </div>
         {/* pagination */}
         <div className="flex justify-center items-center space-x-2 py-3">
           <button
@@ -101,7 +102,6 @@ export default function EventTable() {
             Next ➡
           </button>
         </div>
-      </div>
     </div>
     </>
   );
