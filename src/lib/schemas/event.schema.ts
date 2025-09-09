@@ -38,9 +38,12 @@ export const CapacitySchema = z.object({
 });
 
 export const ImagesSchema = z.object({
-  banner: z.string().optional().nullable(),     // ไม่บังคับเป็น URL
+  banner: z.string().optional().nullable(),
   thumbnail: z.string().optional().nullable(),
-  gallery: z.array(z.string()).optional().nullable(),
+  // 👇 gallery รองรับทั้ง string เดี่ยว และ array ของ string
+  gallery: z.union([z.string(), z.array(z.string())])
+    .optional()
+    .nullable(),
 });
 
 export const SpeakerSchema = z.object({
