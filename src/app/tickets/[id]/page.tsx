@@ -148,28 +148,28 @@ export default function TicketPage() {
                             {event.location.coordinates.lng}
                         </p>
                         <div
-  id="coordinates"
-  className="space-y-4 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6 z-0"
->
-  <h2 className="text-xl font-bold">แผนที่</h2>
+                            id="coordinates"
+                            className="space-y-4 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6 z-0"
+                        >
+                            <h2 className="text-xl font-bold">แผนที่</h2>
 
-  {event.location?.coordinates?.lat != null && event.location?.coordinates?.lng != null ? (
-    <>
-      <p>
-        Lat: {event.location.coordinates.lat}, Lng: {event.location.coordinates.lng}
-      </p>
-      <EventMap
-        lat={event.location.coordinates.lat}
-        lng={event.location.coordinates.lng}
-        address={event.location.address}
-      />
-    </>
-  ) : (
-    <div className="w-full h-72 flex items-center justify-center bg-gray-200 dark:bg-gray-800 text-gray-500">
-      No map available
-    </div>
-  )}
-</div>
+                            {event.location?.coordinates?.lat != null && event.location?.coordinates?.lng != null ? (
+                                <>
+                                    <p>
+                                        Lat: {event.location.coordinates.lat}, Lng: {event.location.coordinates.lng}
+                                    </p>
+                                    <EventMap
+                                        lat={event.location.coordinates.lat}
+                                        lng={event.location.coordinates.lng}
+                                        address={event.location.address}
+                                    />
+                                </>
+                            ) : (
+                                <div className="w-full h-72 flex items-center justify-center bg-gray-200 dark:bg-gray-800 text-gray-500">
+                                    No map available
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     {/* Buy Ticket */}
@@ -179,23 +179,21 @@ export default function TicketPage() {
                     >
                         <h2 className="text-xl font-bold">ซื้อตั๋ว</h2>
                         <div className="flex flex-wrap gap-3">
-                            {Object.entries(event.pricing).map(
-                                ([key, value]) => {
-                                    if (key === 'currency') return null;
-                                    return (
-                                        <button
-                                            key={key}
-                                            onClick={() =>
-                                                setSelectedPrice(key)
-                                            }
-                                            className={`px-4 py-2 border rounded-lg ${selectedPrice === key ? 'bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-800/50 dark:text-gray-100 cursor-pointer'}`}
-                                        >
-                                            {key} - {value}{' '}
-                                            {event.pricing.currency}
-                                        </button>
-                                    );
-                                },
-                            )}
+                            {Object.entries(event.pricing).map(([key, value]) => {
+                                if (key === 'currency' || value <= 0) return null; 
+                                return (
+                                    <button
+                                        key={key}
+                                        onClick={() => setSelectedPrice(key)}
+                                        className={`px-4 py-2 border rounded-lg ${selectedPrice === key
+                                                ? 'bg-blue-500 text-white'
+                                                : 'bg-gray-100 dark:bg-gray-800/50 dark:text-gray-100 cursor-pointer'
+                                            }`}
+                                    >
+                                        {key} - {value} {event.pricing.currency}
+                                    </button>
+                                );
+                            })}
                         </div>
                         <button
                             onClick={handlePurchase}
@@ -204,6 +202,7 @@ export default function TicketPage() {
                             สั่งซื้อ
                         </button>
                     </div>
+
                 </div>
             </div>
         </LayoutMain>
