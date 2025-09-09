@@ -67,8 +67,7 @@ export default function TicketPage() {
 
                     <EventMapSection location={event.location} />
 
-                    <LocationsGrid/>
-
+                    <LocationsGrid />
 
                     <BuyTicketSection pricing={event.pricing} />
                 </div>

@@ -1,10 +1,9 @@
-'use client'
+'use client';
 import Image from 'next/image';
 import { LoginSchema } from '@/lib/schemas/auth.schema';
 import { authClient } from '@/lib/auth-client';
 
 export default function SignInPage() {
-
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -77,8 +76,6 @@ export default function SignInPage() {
                             </div>
                         </div>
 
-                       
-
                         <div>
                             <button
                                 type="submit"
@@ -88,8 +85,6 @@ export default function SignInPage() {
                             </button>
                         </div>
                     </form>
-
-                    
                 </div>
             </div>
         </>

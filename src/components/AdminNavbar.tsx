@@ -20,7 +20,11 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowTurnLeftDownIcon, ArrowUturnLeftIcon, BackwardIcon } from '@heroicons/react/24/solid';
+import {
+    ArrowTurnLeftDownIcon,
+    ArrowUturnLeftIcon,
+    BackwardIcon,
+} from '@heroicons/react/24/solid';
 
 const navigation = [
     { name: 'Overview', href: '/dashboard', icon: HomeIcon, current: true },

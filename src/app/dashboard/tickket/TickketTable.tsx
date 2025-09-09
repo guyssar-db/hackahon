@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const TickketTable = () => {
-  return (
-    <div>TickketTable</div>
-  )
-}
+    return <div>TickketTable</div>;
+};
 
-export default TickketTable
+export default TickketTable;

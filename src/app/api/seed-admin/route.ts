@@ -17,7 +17,7 @@ export async function POST() {
     // (2) อัปเกรด role เป็น admin
     await auth.api.setRole({
         body: { userId: created.user.id, role: ['admin'] },
-        headers: []
+        headers: [],
     });
 
     return NextResponse.json({ ok: true });
