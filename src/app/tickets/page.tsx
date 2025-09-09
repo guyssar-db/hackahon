@@ -28,8 +28,10 @@ async function getEvents(): Promise<Event[]> {
   }))
 }
 
+
 export default async function EventsPage() {
   const events = await getEvents()
+  
 
   return (
     <LayoutMain>

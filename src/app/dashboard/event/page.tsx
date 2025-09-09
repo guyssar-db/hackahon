@@ -14,7 +14,7 @@ export default async function Page() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 w-full">
       <h1 className="text-2xl font-bold mb-6">🎉 Events Dashboard</h1>
       <EventTable data={events} />
     </div>
