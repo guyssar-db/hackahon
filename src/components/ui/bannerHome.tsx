@@ -73,7 +73,7 @@ export default function BannerHome() {
         <section
             className="relative flex flex-col items-center w-full p-5 bg-cover bg-center transition-all duration-700"
             style={{
-                backgroundImage: `url(${events[current].images?.banner || '/fallback.png'})`,
+                backgroundImage: `url(${events[current].images?.banner || '/31343C.svg'})`,
             }}
         >
             {/* overlay blur + darken */}
@@ -90,7 +90,7 @@ export default function BannerHome() {
                             <Image
                                 src={
                                     events[current].images?.banner ||
-                                    '/fallback.png'
+                                    '/31343C.svg'
                                 }
                                 alt={events[current].title}
                                 fill
