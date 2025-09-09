@@ -95,8 +95,8 @@ export default function ProfilePage() {
 
     return (
         <LayoutMain>
-            <div className="bg-gray-100 min-h-[calc(100vh-65px)] flex items-center">
-                <div className="w-full max-w-4xl mx-auto p-4 space-y-6">
+            <div className="bg-gray-100 dark:bg-gray-800 min-h-[calc(100vh-68px)] flex items-center">
+                <div className="w-full max-w-4xl mx-auto p-4 space-y-6 mt-[65px] min-h-[calc(100vh-150px)]">
                     {/* แท็บ */}
                     <div className="flex gap-4">
                         <button
@@ -114,7 +114,7 @@ export default function ProfilePage() {
                     </div>
 
                     {tab === 'info' && (
-                        <div className="bg-white p-6 rounded shadow space-y-4">
+                        <div className="bg-white dark:bg-gray-700 dark:text-white dark:border dark:border-gray-600 p-6 rounded shadow space-y-4">
                             <h2 className="text-xl font-bold">ข้อมูลส่วนตัว</h2>
                             <p>
                                 <span className="font-semibold">ชื่อ:</span>{' '}
@@ -159,28 +159,28 @@ export default function ProfilePage() {
                                             href={`/profile/ticket/${e.event_id}?from=/profile&tab=orders${status ? `&status=${status}` : ''}`}
                                             className="block"
                                         >
-                                            <div className="p-4 bg-white rounded shadow hover:bg-gray-100 cursor-pointer">
+                                            <div className="p-4 bg-white dark:bg-gray-700 dark:text-white dark:border dark:border-gray-600 rounded shadow hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
                                                 <p className="font-semibold">
                                                     {e.title}
                                                 </p>
-                                                <p className="text-sm text-gray-500">
+                                                <p className="text-sm text-gray-500 dark:text-white">
                                                     สถานะ:{' '}
                                                     {p.status === 'pending'
                                                         ? 'ยังไม่จ่าย'
                                                         : 'จ่ายแล้ว'}
                                                 </p>
                                                 {p.pricing && (
-                                                    <p className="text-sm text-gray-500">
+                                                    <p className="text-sm text-gray-500 dark:text-white">
                                                         ราคา: {p.pricing}
                                                     </p>
                                                 )}
                                                 {p.channel && (
-                                                    <p className="text-xs text-gray-400">
+                                                    <p className="text-xs text-gray-400  dark:text-white">
                                                         ช่องทาง: {p.channel}
                                                     </p>
                                                 )}
                                                 {p.created_at && (
-                                                    <p className="text-xs text-gray-400">
+                                                    <p className="text-xs text-gray-400 dark:text-white">
                                                         สร้างเมื่อ:{' '}
                                                         {new Date(
                                                             p.created_at,

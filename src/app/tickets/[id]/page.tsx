@@ -11,6 +11,7 @@ import EventDetail from '@/components/ui/TicketId/EventDetail';
 import OrganizerInfo from '@/components/ui/TicketId/OrganizerInfo';
 import EventMapSection from '@/components/ui/TicketId/EventMapSection';
 import BuyTicketSection from '@/components/ui/TicketId/BuyTicketSection';
+import LocationsGrid from '@/components/ui/TicketId/LocationsGrid';
 
 export default function TicketPage() {
     const { id } = useParams();
@@ -65,6 +66,9 @@ export default function TicketPage() {
                     <OrganizerInfo organizer={event.organizer} />
 
                     <EventMapSection location={event.location} />
+
+                    <LocationsGrid/>
+
 
                     <BuyTicketSection pricing={event.pricing} />
                 </div>
