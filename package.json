@@ -23,10 +23,6 @@
     "prettier": "^3.6.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-<<<<<<< HEAD
-=======
-    "react-leaflet": "^5.0.0",
->>>>>>> 9cf652beb1d7dd078ad28f94b1c2dcfb9325f146
     "zod": "^4.1.5",
     "zustand": "^5.0.8"
   },
