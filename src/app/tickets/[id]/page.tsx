@@ -1,23 +1,20 @@
-// src\app\tickets\[id]
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
-import dynamic from 'next/dynamic';
+import { useParams } from 'next/navigation';
 import { Event } from '@/lib/types/NewEvent';
 import LayoutMain from '@/layouts/LayoutMain';
 
-const EventMap = dynamic(() => import('@/components/ui/EventMap'), {
-    ssr: false,
-});
+import EventSlider from '@/components/ui/TicketId/EventSlider';
+import MiniNav from '@/components/ui/TicketId/MiniNav';
+import EventDetail from '@/components/ui/TicketId/EventDetail';
+import OrganizerInfo from '@/components/ui/TicketId/OrganizerInfo';
+import EventMapSection from '@/components/ui/TicketId/EventMapSection';
+import BuyTicketSection from '@/components/ui/TicketId/BuyTicketSection';
 
 export default function TicketPage() {
     const { id } = useParams();
-    const router = useRouter()
     const [event, setEvent] = useState<Event | null>(null);
-    const [current, setCurrent] = useState(0);
-    const [selectedPrice, setSelectedPrice] = useState<string>('');
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -43,173 +40,33 @@ export default function TicketPage() {
         );
     }
 
-    const images = [event.images.banner, ...(event.images.gallery || [])];
-
-    const handleNext = () => setCurrent((current + 1) % images.length);
-    const handlePrev = () =>
-        setCurrent((current - 1 + images.length) % images.length);
-    const handlePurchase = () => {
-        if (!selectedPrice) return alert('กรุณาเลือกประเภทตั๋วก่อน');
-        
-        else{
-            alert(`เพิ่ม ${selectedPrice} ในตะกร้าสำเร็จ!`);
-            router.push(`/dashboard/ticket/${id}`)
-        }
-
-
-    };
-    const scrollToSection = (id: string) => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
     return (
         <LayoutMain>
             <div className="bg-gray-100 dark:bg-gray-900 z-0">
                 <div className="max-w-4xl mx-auto p-5 mt-[65px] space-y-6 text-gray-900 dark:text-gray-100 transition-colors duration-300 ">
-                    {/* Slide */}
-                    <div className="relative w-full h-72 md:h-96 rounded-lg overflow-hidden shadow-lg">
-                        {images[current]?.trim() ? (
-                            <Image
-                                src={images[current]}
-                                alt={event.title}
-                                fill
-                                sizes="100vw"
-                                className="object-cover rounded-lg"
-                            />
-                        ) : (
-                            <Image
-                                src="/31343C.svg"
-                                alt="no image"
-                                fill
-                                sizes="100vw"
-                                className="object-cover rounded-lg"
-                            />
-                        )}
+                    <EventSlider
+                        images={[
+                            ...(event.images.banner
+                                ? [event.images.banner]
+                                : []),
+                            ...(Array.isArray(event.images.gallery)
+                                ? event.images.gallery.filter(
+                                      (img) => img?.trim() !== '',
+                                  )
+                                : []),
+                        ]}
+                        title={event.title}
+                    />
 
-                        {/* navigation buttons */}
-                        <button
-                            onClick={handlePrev}
-                            className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/50  hover:bg-white/80 dark:hover:bg-gray-700 text-black dark:text-white p-2 rounded-full cursor-pointer"
-                        >
-                            ❮
-                        </button>
-                        <button
-                            onClick={handleNext}
-                            className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/50  hover:bg-white/80 dark:hover:bg-gray-700 text-black dark:text-white p-2 rounded-full cursor-pointer"
-                        >
-                            ❯
-                        </button>
-                    </div>
+                    <MiniNav />
 
-                    {/* Mini Nav */}
-                    <div className="sticky top-[65px] bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-2 flex justify-between items-center transition-all duration-300">
-                        <div className="w-full ">
-                            <button
-                                onClick={() => scrollToSection('buy-ticket')}
-                                className="px-3 py-1 w-full bg-green-500 text-white rounded-md hover:bg-green-600 cursor-pointer"
-                            >
-                                To Buy Ticket
-                            </button>
-                        </div>
-                    </div>
+                    <EventDetail event={event} />
 
-                    {/* Detail */}
-                    <div
-                        id="detail"
-                        className="space-y-2 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6 transition-all duration-300"
-                    >
-                        <h2 className="text-xl font-bold">รายละเอียดกิจกรรม</h2>
-                        <p>{event.description}</p>
-                        <p>
-                            <span className="font-semibold">วันที่:</span>{' '}
-                            {event.schedule.startDate} (
-                            {event.schedule.startTime} -{' '}
-                            {event.schedule.endTime})
-                        </p>
-                        <p>
-                            <span className="font-semibold">สถานที่:</span>{' '}
-                            {event.location.address}
-                        </p>
-                    </div>
+                    <OrganizerInfo organizer={event.organizer} />
 
-                    {/* Organizer */}
-                    <div
-                        id="organizer"
-                        className="space-y-1 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6"
-                    >
-                        <h2 className="text-xl font-bold">ผู้จัด</h2>
-                        <p>{event.organizer.name}</p>
-                        <p>{event.organizer.contact}</p>
-                        <p>{event.organizer.phone}</p>
-                    </div>
+                    <EventMapSection location={event.location} />
 
-                    {/* Coordinates + Map */}
-                    <div
-                        id="coordinates"
-                        className="space-y-4 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6 z-0"
-                    >
-                        <h2 className="text-xl font-bold">แผนที่</h2>
-                        <p>
-                            Lat: {event.location.coordinates.lat}, Lng:{' '}
-                            {event.location.coordinates.lng}
-                        </p>
-                        <div
-                            id="coordinates"
-                            className="space-y-4 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6 z-0"
-                        >
-                            <h2 className="text-xl font-bold">แผนที่</h2>
-
-                            {event.location?.coordinates?.lat != null && event.location?.coordinates?.lng != null ? (
-                                <>
-                                    <p>
-                                        Lat: {event.location.coordinates.lat}, Lng: {event.location.coordinates.lng}
-                                    </p>
-                                    <EventMap
-                                        lat={event.location.coordinates.lat}
-                                        lng={event.location.coordinates.lng}
-                                        address={event.location.address}
-                                    />
-                                </>
-                            ) : (
-                                <div className="w-full h-72 flex items-center justify-center bg-gray-200 dark:bg-gray-800 text-gray-500">
-                                    No map available
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Buy Ticket */}
-                    <div
-                        id="buy-ticket"
-                        className="space-y-4 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6"
-                    >
-                        <h2 className="text-xl font-bold">ซื้อตั๋ว</h2>
-                        <div className="flex flex-wrap gap-3">
-                            {Object.entries(event.pricing).map(([key, value]) => {
-                                if (key === 'currency' || value <= 0) return null; 
-                                return (
-                                    <button
-                                        key={key}
-                                        onClick={() => setSelectedPrice(key)}
-                                        className={`px-4 py-2 border rounded-lg ${selectedPrice === key
-                                                ? 'bg-blue-500 text-white'
-                                                : 'bg-gray-100 dark:bg-gray-800/50 dark:text-gray-100 cursor-pointer'
-                                            }`}
-                                    >
-                                        {key} - {value} {event.pricing.currency}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                        <button
-                            onClick={handlePurchase}
-                            className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 cursor-pointer"
-                        >
-                            สั่งซื้อ
-                        </button>
-                    </div>
-
+                    <BuyTicketSection pricing={event.pricing} />
                 </div>
             </div>
         </LayoutMain>
