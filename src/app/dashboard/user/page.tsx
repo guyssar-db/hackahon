@@ -16,6 +16,7 @@ export default async function UsersList() {
         <div>
             <h1 className="mb-4 text-xl font-semibold">Users</h1>
             <pre>{JSON.stringify(session.user, null, 2)}</pre>
+            link
         </div>
 
 
