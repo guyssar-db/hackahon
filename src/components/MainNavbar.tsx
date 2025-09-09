@@ -85,7 +85,7 @@ export default function MainNavbar() {
 
     return (
         <>
-            <nav className="fixed w-full flex justify-between items-center gap-6 p-4 px-8 bg-linear-to-r from-cyan-500 to-blue-600 h-[65px] duration-300 ease-in-out z-10 drop-shadow-lg">
+            <nav className="fixed w-full flex justify-between items-center gap-6 p-4 px-4 bg-linear-to-r from-cyan-500 to-blue-600 h-[65px] duration-300 ease-in-out z-10 drop-shadow-lg">
                 <Link
                     href="/"
                     className="font-bold text-lg text-white duration-300 ease-in-out"
@@ -113,6 +113,8 @@ export default function MainNavbar() {
                     })}
 
                     <button
+                   name='dark-light'
+
                         onClick={toggleTheme}
                         className="ml-4 px-3 py-1 rounded-2xl border border-gray-400  
                      bg-white  text-gray-800  
@@ -202,6 +204,7 @@ export default function MainNavbar() {
                     </Menu>
                 </div>
                 <button
+                   name='dark-light'
                     onClick={toggleTheme}
                     className="ml-4 px-3 py-1 rounded-2xl border border-gray-400  
                      bg-white  text-gray-800  
@@ -211,7 +214,7 @@ export default function MainNavbar() {
                 </button>
             </nav>
 
-            <nav className="fixed flex sm:hidden h-[85px] bottom-0 w-full bg-linear-to-r from-cyan-500 to-blue-600 drop-shadow-2xl duration-300 ease-in-out">
+            <nav className="fixed flex sm:hidden h-[85px] bottom-0 w-full bg-linear-to-r from-cyan-500 to-blue-600 drop-shadow-2xl duration-300 ease-in-out z-40">
                 {/* nav Mobile */}
                 <div className="flex justify-around items-center w-full">
                     {navItemsMobile.map((item) => {

@@ -6,7 +6,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'plus.unsplash.com',
-        pathname: '/**', // อนุญาตทุก path
+        pathname: '/**',
       },
       {
         protocol: 'https',
