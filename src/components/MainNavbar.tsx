@@ -46,7 +46,7 @@ export default function MainNavbar() {
 
     return (
         <>
-            <nav className="fixed w-full flex justify-between items-center gap-6 p-4 px-8 bg-linear-to-r from-cyan-500 to-blue-600 h-[65px] duration-300 ease-in-out z-10 drop-shadow-lg">
+            <nav className="fixed w-full flex justify-between items-center gap-6 p-4 px-4 bg-linear-to-r from-cyan-500 to-blue-600 h-[65px] duration-300 ease-in-out z-10 drop-shadow-lg">
                 <Link
                     href="/"
                     className="font-bold text-lg text-white duration-300 ease-in-out"
@@ -74,6 +74,8 @@ export default function MainNavbar() {
                     })}
 
                     <button
+                   name='dark-light'
+
                         onClick={toggleTheme}
                         className="ml-4 px-3 py-1 rounded-2xl border border-gray-400  
                      bg-white  text-gray-800  
@@ -82,7 +84,7 @@ export default function MainNavbar() {
                         {theme === 'dark' ? '🌙' : '☀️'}
                     </button>
                     <button
-                        name="profile button"
+                        name="profilebutton"
                         className=" px-2 py-2 rounded-3xl border border-gray-400 bg-white text-gray-800 hover:bg-gray-200 transition duration-300 ease-in-out"
                     >
                         <svg
@@ -100,6 +102,7 @@ export default function MainNavbar() {
                     </button>
                 </div>
                 <button
+                   name='dark-light'
                     onClick={toggleTheme}
                     className="ml-4 px-3 py-1 rounded-2xl border border-gray-400  
                      bg-white  text-gray-800  
