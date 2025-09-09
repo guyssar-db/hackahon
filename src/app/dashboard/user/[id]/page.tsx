@@ -5,8 +5,7 @@ export default async function ProductPage({
 }: {
     params: { id: number };
 }) {
-    const { id } = await params
+    const { id } = await params;
 
     return <>event details {id}</>;
 }
-

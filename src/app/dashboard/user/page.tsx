@@ -18,7 +18,5 @@ export default async function UsersList() {
             <pre>{JSON.stringify(session.user, null, 2)}</pre>
             link
         </div>
-
-
     );
 }

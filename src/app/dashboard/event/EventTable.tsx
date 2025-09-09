@@ -87,7 +87,7 @@ export default function EventTable({ data }: Props) {
     };
 
     return (
-        <div className='w-full overflow-hidden overflow-x-scroll hide-scrollbar'>
+        <div className="w-full overflow-hidden overflow-x-scroll hide-scrollbar">
             <div className="w-full shadow-lg rounded-lg overflow-hidden overflow-x-scroll hide-scrollbar">
                 {/* Toast */}
                 {message && (
