@@ -1,11 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function newPostEvents() {
-  return (
-    <div>
-
-        NewPostEvent
-
-    </div>
-  )
+    return <div>NewPostEvent</div>;
 }

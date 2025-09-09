@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export default function OrganizerTableEvent() {
     return (
@@ -13,7 +13,9 @@ export default function OrganizerTableEvent() {
                             <th className="px-6 py-4 text-left text-gray-600 font-medium">
                                 Unit Price
                             </th>
-                            <th className="px-6 py-4 text-left text-gray-600 font-medium">Qty</th>
+                            <th className="px-6 py-4 text-left text-gray-600 font-medium">
+                                Qty
+                            </th>
                             <th className="px-6 py-4 text-left text-gray-600 font-medium">
                                 Total
                             </th>
@@ -31,12 +33,16 @@ export default function OrganizerTableEvent() {
                                     <p className="text-gray-800 font-medium">
                                         Apple Watch Series 8 GPS 45mm
                                     </p>
-                                    <span className="text-green-500 text-sm">UBL</span>
+                                    <span className="text-green-500 text-sm">
+                                        UBL
+                                    </span>
                                 </div>
                             </td>
                             <td className="px-6 py-4">$550</td>
                             <td className="px-6 py-4">x3</td>
-                            <td className="px-6 py-4 font-semibold text-gray-900">$1,500</td>
+                            <td className="px-6 py-4 font-semibold text-gray-900">
+                                $1,500
+                            </td>
                         </tr>
                         <tr className="border-b">
                             <td className="px-6 py-4 flex items-center gap-4">
@@ -49,12 +55,16 @@ export default function OrganizerTableEvent() {
                                     <p className="text-gray-800 font-medium">
                                         Apple Watch Series 8 GPS 45mm
                                     </p>
-                                    <span className="text-green-500 text-sm">UBL</span>
+                                    <span className="text-green-500 text-sm">
+                                        UBL
+                                    </span>
                                 </div>
                             </td>
                             <td className="px-6 py-4">$550</td>
                             <td className="px-6 py-4">x3</td>
-                            <td className="px-6 py-4 font-semibold text-gray-900">$1,500</td>
+                            <td className="px-6 py-4 font-semibold text-gray-900">
+                                $1,500
+                            </td>
                         </tr>
                         <tr>
                             <td className="px-6 py-4 flex items-center gap-4">
@@ -67,17 +77,20 @@ export default function OrganizerTableEvent() {
                                     <p className="text-gray-800 font-medium">
                                         Apple Watch Series 8 GPS 45mm
                                     </p>
-                                    <span className="text-green-500 text-sm">UBL</span>
+                                    <span className="text-green-500 text-sm">
+                                        UBL
+                                    </span>
                                 </div>
                             </td>
                             <td className="px-6 py-4">$550</td>
                             <td className="px-6 py-4">x3</td>
-                            <td className="px-6 py-4 font-semibold text-gray-900">$1,500</td>
+                            <td className="px-6 py-4 font-semibold text-gray-900">
+                                $1,500
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
-    )
+    );
 }
