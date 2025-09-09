@@ -1,8 +1,8 @@
 export interface Ticket {
+    id: string;
     event_id: string;
-    available: number;
     userid: string;
-    payment: Payment[];
+    payment: Payment;
 }
 
 export interface Payment {
