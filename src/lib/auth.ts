@@ -4,6 +4,7 @@ import { admin as adminPlugin } from 'better-auth/plugins';
 import { nextCookies } from 'better-auth/next-js';
 import { ac, admin, user, organize } from './helpers/permission';
 import Database from 'better-sqlite3';
+import { usernameClient } from 'better-auth/client/plugins';
 
 export const auth = betterAuth({
     emailAndPassword: {
@@ -12,6 +13,7 @@ export const auth = betterAuth({
     database: new Database('./data/database.sqlite'),
     plugins: [
         nextCookies(),
+        usernameClient(),
         adminPlugin({
             ac,
             roles: { admin, user, organize },

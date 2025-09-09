@@ -38,7 +38,6 @@ export default function AuthButtons() {
                         email: 'admin@example.com',
                         password: 'secretpw',
                         name: 'Admin',
-                        role: 'admin', // ใส่ได้ที่ admin API (ไม่ใช่ signUp)
                     })
                 }
             >
