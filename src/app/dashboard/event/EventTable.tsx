@@ -88,51 +88,77 @@ export default function EventTable({ data }: Props) {
 
       {loading && <div className="text-center py-2 text-blue-600">⏳ Processing...</div>}
 
-      <table className="min-w-full border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="w-auto py-4 px-5 text-left text-gray-600 font-bold uppercase">ID</th>
-            <th className="w-auto py-4 px-15 text-left text-gray-600 font-bold uppercase">Title</th>
-            <th className="w-auto py-4 px-20 text-left text-gray-600 font-bold uppercase">Description</th>
-            <th className="w-auto py-4 px-10 text-left text-gray-600 font-bold uppercase">Date</th>
-            <th className="w-auto py-4 px-10 text-left text-gray-600 font-bold uppercase">Category</th>
-            <th className="w-auto py-4 px-10 text-left text-gray-600 font-bold uppercase">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginated.map((e) => (
-            <tr key={e.id} className="text-center">
-              <td className="py-4 px-6 border-b border-gray-200">{e.id}</td>
-              <td className="py-4 px-6 border-b border-gray-200">{e.title}</td>
-              <td className="py-4 px-6 border-b border-gray-200">{e.description}</td>
-              <td className="py-4 px-6 border-b border-gray-200">{e.schedule?.startDate}</td>
-              <td className="py-4 px-6 border-b border-gray-200">{e.category}</td>
-              <td className="py-4 px-4 border-b border-gray-200">
-                <div className="flex justify-center gap-2">
-                  <button
-                    onClick={() => handleView(e)}
-                    className="px-2 py-1 bg-gray-500 text-white rounded"
-                  >
-                    👀 View
-                  </button>
-                  <button
-                    onClick={() => handleEdit(e)}
-                    className="px-2 py-1 bg-blue-500 text-white rounded"
-                  >
-                    ✏️ Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(e.id!)}
-                    className="px-2 py-1 bg-red-500 text-white rounded"
-                  >
-                    🗑 Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <table className="w-full table-auto bg-white shadow-md rounded-lg border border-gray-200">
+  <thead>
+    <tr className="bg-gray-100">
+      <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">ID</th>
+      <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">Image</th>
+      <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">Event Title</th>
+      <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">Description</th>
+      <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">Date</th>
+      <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">Category</th>
+      <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {paginated.map((e) => (
+      <tr key={e.id} className="text-center border-b">
+        {/* ID */}
+        <td className="py-4 px-6">{e.id}</td>
+
+        {/* ✅ Image column */}
+        <td className="py-4 px-6">
+          {e.images?.thumbnail ? (
+            <img
+              src={e.images.thumbnail}
+              alt={e.title ?? "Event"}
+              className="w-16 h-16 rounded-md object-cover mx-auto"
+            />
+          ) : (
+            <span className="text-gray-400">No Image</span>
+          )}
+        </td>
+
+        {/* Title */}
+        <td className="py-4 px-6 text-gray-800 font-medium">{e.title}</td>
+
+        {/* Description */}
+        <td className="py-4 px-6">{e.description}</td>
+
+        {/* Date */}
+        <td className="py-4 px-6">{e.schedule?.startDate ?? "-"}</td>
+
+        {/* Category */}
+        <td className="py-4 px-6">{e.category ?? "-"}</td>
+
+        {/* Actions */}
+        <td className="py-4 px-6">
+          <div className="flex justify-center gap-2">
+            <button
+              onClick={() => handleView(e)}
+              className="px-3 py-1 bg-gray-500 text-white rounded"
+            >
+              👀 View
+            </button>
+            <button
+              onClick={() => handleEdit(e)}
+              className="px-3 py-1 bg-blue-500 text-white rounded"
+            >
+              ✏️ Edit
+            </button>
+            <button
+              onClick={() => handleDelete(e.id!)}
+              className="px-3 py-1 bg-red-500 text-white rounded"
+            >
+              🗑 Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
 
       {/* pagination */}
       <div className="flex justify-center items-center space-x-2 py-3">
