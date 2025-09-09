@@ -112,7 +112,7 @@ export default function MainNavbar() {
                 </button>
             </nav>
 
-            <nav className="fixed flex sm:hidden h-[85px] bottom-0 w-full bg-linear-to-r from-cyan-500 to-blue-600 drop-shadow-2xl duration-300 ease-in-out">
+            <nav className="fixed flex sm:hidden h-[85px] bottom-0 w-full bg-linear-to-r from-cyan-500 to-blue-600 drop-shadow-2xl duration-300 ease-in-out z-40">
                 {/* nav Mobile */}
                 <div className="flex justify-around items-center w-full">
                     {navItemsMobile.map((item) => {

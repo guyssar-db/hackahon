@@ -1,4 +1,3 @@
-// src\app\tickets\[id]
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -8,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { Event } from '@/lib/types/NewEvent';
 import LayoutMain from '@/layouts/LayoutMain';
 
+// import Map แบบ dynamic เพื่อให้ SSR ปิด
 const EventMap = dynamic(() => import('@/components/ui/EventMap'), { ssr: false });
 
 export default function TicketPage() {
@@ -53,7 +53,7 @@ export default function TicketPage() {
 
   return (
     <LayoutMain>
-      <div className='bg-gray-100 dark:bg-gray-900 z-0'>
+      <div className='bg-gray-100 dark:bg-gray-900'>
         <div className="max-w-4xl mx-auto p-5 mt-[65px] space-y-6 text-gray-900 dark:text-gray-100 transition-colors duration-300 ">
 
           {/* Slide */}
@@ -65,17 +65,15 @@ export default function TicketPage() {
               sizes="100vw"
               className="object-cover rounded-lg"
             />
-
-            {/* navigation buttons */}
             <button
               onClick={handlePrev}
-              className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/50  hover:bg-white/80 dark:hover:bg-gray-700 text-black dark:text-white p-2 rounded-full cursor-pointer"
+              className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/50 dark:bg-gray-800/50 hover:bg-white/80 dark:hover:bg-gray-700 text-black dark:text-white p-2 rounded-full cursor-pointer"
             >
               ❮
             </button>
             <button
               onClick={handleNext}
-              className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/50  hover:bg-white/80 dark:hover:bg-gray-700 text-black dark:text-white p-2 rounded-full cursor-pointer"
+              className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/50 dark:bg-gray-800/50 hover:bg-white/80 dark:hover:bg-gray-700 text-black dark:text-white p-2 rounded-full cursor-pointer"
             >
               ❯
             </button>
@@ -97,7 +95,7 @@ export default function TicketPage() {
           <div id="detail" className="space-y-2 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6 transition-all duration-300">
             <h2 className="text-xl font-bold">รายละเอียดกิจกรรม</h2>
             <p>{event.description}</p>
-            <p><span className="font-semibold">วันที่:</span> {event.schedule.startDate} ({event.schedule.startTime} - {event.schedule.endTime})</p>
+            <p><span className="font-semibold">วันที่:</span> {event.schedule.startDate} - {event.schedule.endDate} ({event.schedule.startTime} - {event.schedule.endTime})</p>
             <p><span className="font-semibold">สถานที่:</span> {event.location.address}</p>
           </div>
 
@@ -110,16 +108,14 @@ export default function TicketPage() {
           </div>
 
           {/* Coordinates + Map */}
-          <div id="coordinates" className="space-y-4 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6 z-0">
+          <div id="coordinates" className="space-y-4 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6">
             <h2 className="text-xl font-bold">แผนที่</h2>
             <p>Lat: {event.location.coordinates.lat}, Lng: {event.location.coordinates.lng}</p>
-            <div>
             <EventMap
               lat={event.location.coordinates.lat}
               lng={event.location.coordinates.lng}
               address={event.location.address}
             />
-            </div>
           </div>
 
           {/* Buy Ticket */}
