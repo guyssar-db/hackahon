@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 export default function SignInPage() {
     const router = useRouter();
-    const [email, setEmail] = useState('demo@example.com');
+    const [email, setEmail] = useState('admin@example.com');
     const [password, setPassword] = useState('secretpw');
     const [error, setError] = useState<string>();
 
