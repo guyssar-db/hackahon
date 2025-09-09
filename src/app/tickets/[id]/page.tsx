@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { Event } from '@/lib/types/NewEvent';
@@ -14,6 +14,7 @@ const EventMap = dynamic(() => import('@/components/ui/EventMap'), {
 
 export default function TicketPage() {
     const { id } = useParams();
+    const router = useRouter()
     const [event, setEvent] = useState<Event | null>(null);
     const [current, setCurrent] = useState(0);
     const [selectedPrice, setSelectedPrice] = useState<string>('');
@@ -49,7 +50,13 @@ export default function TicketPage() {
         setCurrent((current - 1 + images.length) % images.length);
     const handlePurchase = () => {
         if (!selectedPrice) return alert('กรุณาเลือกประเภทตั๋วก่อน');
-        alert(`เพิ่ม ${selectedPrice} ในตะกร้าสำเร็จ!`);
+        
+        else{
+            alert(`เพิ่ม ${selectedPrice} ในตะกร้าสำเร็จ!`);
+            router.push(`/dashboard/ticket/${id}`)
+        }
+
+
     };
     const scrollToSection = (id: string) => {
         const el = document.getElementById(id);
