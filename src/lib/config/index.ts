@@ -1,4 +1,4 @@
-import { Env } from '@/lib/schemas/cofig.schema';
+import { Env } from '@/lib/schemas/config.schema';
 
 export const config = Env.parse({
   BASE_URL: process.env.BASE_URL,

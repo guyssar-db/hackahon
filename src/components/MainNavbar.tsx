@@ -48,6 +48,22 @@ export default function MainNavbar() {
             setLoading(false);
         }
     };
+    const signUpSubmit = async () => {
+        try {
+            await authClient.signUp.email({
+                email: 'user3@example.com',
+                name: 'user3',
+                password: 'secretpw',
+            });
+
+            router.push('/');
+        } catch (err) {
+            console.error(err);
+            alert('Sign Up failed');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const toggleTheme = () => {
         if (theme === 'dark') {
@@ -113,8 +129,7 @@ export default function MainNavbar() {
                     })}
 
                     <button
-                   name='dark-light'
-
+                        name="dark-light"
                         onClick={toggleTheme}
                         className="ml-4 px-3 py-1 rounded-2xl border border-gray-400  
                      bg-white  text-gray-800  
@@ -198,13 +213,23 @@ export default function MainNavbar() {
                                                 : 'Sign in'}
                                         </button>
                                     </MenuItem>
+                                    <MenuItem>
+                                        <button
+                                            onClick={signUpSubmit}
+                                            className="block w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                                        >
+                                            {loading
+                                                ? 'SignUp…'
+                                                : 'Sign Up'}
+                                        </button>
+                                    </MenuItem>
                                 </div>
                             )}
                         </MenuItems>
                     </Menu>
                 </div>
                 <button
-                   name='dark-light'
+                    name="dark-light"
                     onClick={toggleTheme}
                     className="ml-4 px-3 py-1 rounded-2xl border border-gray-400  
                      bg-white  text-gray-800  
