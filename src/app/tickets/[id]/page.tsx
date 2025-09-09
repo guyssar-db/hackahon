@@ -11,6 +11,7 @@ import EventDetail from '@/components/ui/TicketId/EventDetail';
 import OrganizerInfo from '@/components/ui/TicketId/OrganizerInfo';
 import EventMapSection from '@/components/ui/TicketId/EventMapSection';
 import BuyTicketSection from '@/components/ui/TicketId/BuyTicketSection';
+import LocationsGrid from '@/components/ui/TicketId/LocationsGrid';
 
 export default function TicketPage() {
     const { id } = useParams();
@@ -65,6 +66,10 @@ export default function TicketPage() {
                     <OrganizerInfo organizer={event.organizer} />
 
                     <EventMapSection location={event.location} />
+                    <div className='space-y-4 bg-white dark:bg-gray-700 shadow-md rounded-lg px-4 py-6 z-0'>
+                      <p className='text-xl font-bold'>ที่พักใกล้เคียง</p>
+                    <LocationsGrid/>
+                    </div>
 
                     <BuyTicketSection pricing={event.pricing} />
                 </div>
