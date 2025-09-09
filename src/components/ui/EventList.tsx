@@ -76,8 +76,11 @@ export default function EventList() {
     fetchEvents()
   }, [])
 
-  if (loading) return <p className="text-center">กำลังโหลดกิจกรรม...</p>
-  if (error) return <p className="text-center text-red-500">เกิดข้อผิดพลาด: {error}</p>
+  if (loading) return <div className='mt-[65px] min-h-[calc(100vh-65px)] flex justify-center items-center bg-gray-100 dark:bg-gray-800'>
+    <p className="text-center ">กำลังโหลดกิจกรรม...</p>
+    </div>
+  if (error) return 
+  <p className="text-center text-red-500">เกิดข้อผิดพลาด: {error}</p>
 
   const filteredEvents = events
     .filter(e => e.schedule && e.location && e.pricing) // ต้องมี fields พื้นฐาน
