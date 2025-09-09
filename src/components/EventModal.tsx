@@ -134,12 +134,8 @@ export default function EventModal({ open, mode, event, onClose, onSave }: Props
               <p>
                 <strong>Time:</strong> {form.schedule?.startTime} → {form.schedule?.endTime}
               </p>
-              <p>
-                <strong>Banner:</strong> {form.images?.banner}
-              </p>
-              <p>
-                <strong>Gallery:</strong> {form.images?.gallery}
-              </p>
+            
+             
             </div>
           ) : (
             <form className="space-y-3">

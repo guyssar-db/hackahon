@@ -69,6 +69,9 @@ export default function NewPostEvent() {
   };
 
   return (
+    <>
+        <p>New Post Event</p>
+
     <div className="flex items-center justify-center p-12">
       <div className="mx-auto w-full max-w-[550px] bg-white">
         <form onSubmit={handleSubmit}>
@@ -245,5 +248,6 @@ export default function NewPostEvent() {
         </form>
       </div>
     </div>
+  </>
   );
 }
