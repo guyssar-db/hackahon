@@ -1,12 +1,20 @@
 'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 
 export default function MainNavbar() {
     const pathname = usePathname();
+    const router = useRouter();
     const [theme, setTheme] = useState<'light' | 'dark'>('light');
+    const { data, isPending, error, refetch } = authClient.useSession();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (
@@ -22,6 +30,25 @@ export default function MainNavbar() {
         }
     }, []);
 
+    console.log(data?.user);
+
+   
+    const signInSubmit = async () => {
+        try {
+            setLoading(true);
+            await authClient.signIn.email({
+                email: 'admin@example.com',
+                password: 'secretpw',
+            });
+            router.push('/');
+        } catch (err) {
+            console.error(err);
+            alert('Sign in failed');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const toggleTheme = () => {
         if (theme === 'dark') {
             localStorage.theme = 'light';
@@ -35,13 +62,25 @@ export default function MainNavbar() {
     };
 
     const navItems = [
-        { name: "Home", href: "/" },
-        { name: "Ticket", href: "/tickets" },
+        { name: 'Home', href: '/' },
+        { name: 'Ticket', href: '/tickets' },
     ];
     const navItemsMobile = [
-        { name: "Ticket", href: "/tickets", images: "https://www.svgrepo.com/show/488420/ticket.svg" },
-        { name: "Home", href: "/", images: "https://www.svgrepo.com/show/61237/home-icon-silhouette.svg" },
-        { name: "Profile", href: "/profile", images: "https://www.svgrepo.com/show/491108/profile.svg" },
+        {
+            name: 'Ticket',
+            href: '/tickets',
+            images: 'https://www.svgrepo.com/show/488420/ticket.svg',
+        },
+        {
+            name: 'Home',
+            href: '/',
+            images: 'https://www.svgrepo.com/show/61237/home-icon-silhouette.svg',
+        },
+        {
+            name: 'Profile',
+            href: '/profile',
+            images: 'https://www.svgrepo.com/show/491108/profile.svg',
+        },
     ];
 
     return (
@@ -81,23 +120,86 @@ export default function MainNavbar() {
                     >
                         {theme === 'dark' ? '🌙' : '☀️'}
                     </button>
-                    <button
-                        name="profile button"
-                        className=" px-2 py-2 rounded-3xl border border-gray-400 bg-white text-gray-800 hover:bg-gray-200 transition duration-300 ease-in-out"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            className="lucide lucide-user h-5 w-5"
+                    <Menu as="div" className="relative inline-block">
+                        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-white/20">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                className="lucide lucide-user h-5 w-5"
+                            >
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <ChevronDownIcon
+                                aria-hidden="true"
+                                className="-mr-1 size-5 text-gray-400"
+                            />
+                        </MenuButton>
+
+                        <MenuItems
+                            transition
+                            className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-white/10 rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                         >
-                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </button>
+                            {data?.user ? (
+                                <>
+                                    <div className="px-4 py-3">
+                                        {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+
+                                        <p className="text-sm text-gray-400">
+                                            Signed in as
+                                        </p>
+                                        <p className="truncate text-sm font-medium text-white">
+                                            {data?.user.email}
+                                        </p>
+                                    </div>
+
+                                    <div className="py-1">
+                                        <MenuItem>
+                                            <a
+                                                href="/dashboard"
+                                                className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
+                                            >
+                                                Dashboard
+                                            </a>
+                                        </MenuItem>
+                                    </div>
+                                    <div className="py-1">
+                                        <form action="#" method="POST">
+                                            <MenuItem>
+                                                <button
+                                                    type="submit"
+                                                    className="block w-full px-4 py-2 text-left text-sm text-gray-300 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
+                                                    onClick={() =>
+                                                        authClient.signOut()
+                                                    }
+                                                >
+                                                    Sign out
+                                                </button>
+                                            </MenuItem>
+                                        </form>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="py-1">
+                                    <MenuItem>
+                                        <button
+                                            onClick={signInSubmit}
+                                            disabled={loading}
+                                            className="block w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                                        >
+                                            {loading
+                                                ? 'Signing in…'
+                                                : 'Sign in'}
+                                        </button>
+                                    </MenuItem>
+                                </div>
+                            )}
+                        </MenuItems>
+                    </Menu>
                 </div>
                 <button
                     onClick={toggleTheme}
