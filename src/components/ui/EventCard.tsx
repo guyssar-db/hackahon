@@ -8,7 +8,7 @@ import type {EventCardProps} from '@/lib/types/NewEvent'
 export default function EventCard({ event }: EventCardProps) {
   return (
     <Link
-  href={`/ticket/${event.id}`}
+  href={`/tickets/${event.id}`}
   className="w-48 flex-shrink-0 dark:bg-gray-950 rounded-lg shadow-lg overflow-hidden 
              hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col 
              items-center bg-white"
