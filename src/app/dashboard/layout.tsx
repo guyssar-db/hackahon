@@ -9,7 +9,7 @@ export default function DashboardLayout({
         <div>
             <LayoutAdmin>
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                    <div className="lg:col-span-2">{children}</div>
+                    <div className="lg:col-span-3">{children}</div>
                 </div>
             </LayoutAdmin>
         </div>
