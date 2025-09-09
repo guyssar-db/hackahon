@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -86,3 +87,12 @@ export default function EventTablePage() {
     </div>
   );
 }
+=======
+import React from 'react';
+
+const page = () => {
+    return <div>page</div>;
+};
+
+export default page;
+>>>>>>> 0be45544b993a52120bab0ba8110f6823b99bb70
