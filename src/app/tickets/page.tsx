@@ -6,7 +6,6 @@ async function getEvents(): Promise<Event[]> {
   const res = await fetch("http://54.169.154.143:3082/events")
   const data = await res.json()
 
-  // JSON ใหม่เป็น array ของ events อยู่แล้ว
   return data.map((e: any) => ({
     id: e.id,
     title: e.title,
