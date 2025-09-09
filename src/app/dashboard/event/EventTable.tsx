@@ -64,10 +64,16 @@ export default function EventTable({ data }: Props) {
     };
 
     const handleSave = async (updated: Event) => {
+        if (!updated.id) {
+            console.error('Event ID is missing!');
+            setMessage({ type: 'error', text: '❌ Event ID is missing' });
+            return;
+        }
+
         try {
             setLoading(true);
             const saved = await updateEvent(updated.id, updated);
-            setEvents(events.map((e) => (e.id === updated.id ? saved : e))); // ✅ ใช้ saved
+            setEvents(events.map((e) => (e.id === updated.id ? saved : e)));
             setMessage({
                 type: 'success',
                 text: '💾 Event updated successfully!',
@@ -81,121 +87,122 @@ export default function EventTable({ data }: Props) {
     };
 
     return (
-      <>
-        <div className="w-full shadow-lg rounded-lg overflow-hidden overflow-x-scroll hide-scrollbar">
-            {/* Toast */}
-            {message && (
-                <div
-                    className={`fixed top-4 right-4 px-4 py-2 rounded shadow-lg text-white ${
-                        message.type === 'success'
-                            ? 'bg-green-500'
-                            : 'bg-red-500'
-                    }`}
-                >
-                    {message.text}
-                </div>
-            )}
+        <div className='w-full overflow-hidden overflow-x-scroll hide-scrollbar'>
+            <div className="w-full shadow-lg rounded-lg overflow-hidden overflow-x-scroll hide-scrollbar">
+                {/* Toast */}
+                {message && (
+                    <div
+                        className={`fixed top-4 right-4 px-4 py-2 rounded shadow-lg text-white ${
+                            message.type === 'success'
+                                ? 'bg-green-500'
+                                : 'bg-red-500'
+                        }`}
+                    >
+                        {message.text}
+                    </div>
+                )}
 
-            {loading && (
-                <div className="text-center py-2 text-blue-600">
-                    ⏳ Processing...
-                </div>
-            )}
+                {loading && (
+                    <div className="text-center py-2 text-blue-600">
+                        ⏳ Processing...
+                    </div>
+                )}
 
-            <table className="w-full table-auto bg-white shadow-md rounded-lg border border-gray-200">
-                <thead>
-                    <tr className="bg-gray-100">
-                        <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                            ID
-                        </th>
-                        <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                            Image
-                        </th>
-                        <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                            Event Title
-                        </th>
-                        <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                            Description
-                        </th>
-                        <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                            Date
-                        </th>
-                        <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                            Category
-                        </th>
-                        <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {paginated.map((e) => (
-                        <tr key={e.id} className="text-center border-b">
-                            {/* ID */}
-                            <td className="py-4 px-6">{e.id}</td>
-
-                            {/* ✅ Image column */}
-                            <td className="py-4 px-6">
-                                {e.images?.thumbnail ? (
-                                    <img
-                                        src={e.images.thumbnail}
-                                        alt={e.title ?? 'Event'}
-                                        className="w-16 h-16 rounded-md object-cover mx-auto"
-                                    />
-                                ) : (
-                                    <span className="text-gray-400">
-                                        No Image
-                                    </span>
-                                )}
-                            </td>
-
-                            {/* Title */}
-                            <td className="py-4 px-6 text-gray-800 font-medium">
-                                {e.title}
-                            </td>
-
-                            {/* Description */}
-                            <td className="py-4 px-6">{e.description}</td>
-
-                            {/* Date */}
-                            <td className="py-4 px-6">
-                                {e.schedule?.startDate ?? '-'}
-                            </td>
-
-                            {/* Category */}
-                            <td className="py-4 px-6">{e.category ?? '-'}</td>
-
-                            {/* Actions */}
-                            <td className="py-4 px-6">
-                            
-                                <div className="flex justify-center gap-2">
-                                    <button
-                                        onClick={() => handleView(e)}
-                                        className="px-3 py-1 bg-gray-500 text-white rounded"
-                                    >
-                                        👀 View
-                                    </button>
-                                    <button
-                                        onClick={() => handleEdit(e)}
-                                        className="px-3 py-1 bg-blue-500 text-white rounded"
-                                    >
-                                        ✏️ Edit
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(e.id!)}
-                                        className="px-3 py-1 bg-red-500 text-white rounded"
-                                    >
-                                        🗑 Delete
-                                    </button>
-                                </div>
-                              </td>
+                <table className="w-full table-auto bg-white shadow-md rounded-lg border border-gray-200 ">
+                    <thead>
+                        <tr className="bg-gray-100">
+                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
+                                ID
+                            </th>
+                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
+                                Image
+                            </th>
+                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
+                                Event Title
+                            </th>
+                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
+                                Description
+                            </th>
+                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
+                                Date
+                            </th>
+                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
+                                Category
+                            </th>
+                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
+                                Actions
+                            </th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {paginated.map((e) => (
+                            <tr key={e.id} className="text-center border-b">
+                                {/* ID */}
+                                <td className="py-4 px-6">{e.id}</td>
 
-            {/* pagination */}
-        </div>
+                                {/* ✅ Image column */}
+                                <td className="py-4 px-6">
+                                    {e.images?.thumbnail ? (
+                                        <img
+                                            src={e.images.thumbnail}
+                                            alt={e.title ?? 'Event'}
+                                            className="w-16 h-16 rounded-md object-cover mx-auto"
+                                        />
+                                    ) : (
+                                        <span className="text-gray-400">
+                                            No Image
+                                        </span>
+                                    )}
+                                </td>
+
+                                {/* Title */}
+                                <td className="py-4 px-6 text-gray-800 font-medium">
+                                    {e.title}
+                                </td>
+
+                                {/* Description */}
+                                <td className="py-4 px-6">{e.description}</td>
+
+                                {/* Date */}
+                                <td className="py-4 px-6">
+                                    {e.schedule?.startDate ?? '-'}
+                                </td>
+
+                                {/* Category */}
+                                <td className="py-4 px-6">
+                                    {e.category ?? '-'}
+                                </td>
+
+                                {/* Actions */}
+                                <td className="py-4 px-6">
+                                    <div className="flex justify-center gap-2">
+                                        <button
+                                            onClick={() => handleView(e)}
+                                            className="px-3 py-1 bg-gray-500 text-white rounded"
+                                        >
+                                            👀 View
+                                        </button>
+                                        <button
+                                            onClick={() => handleEdit(e)}
+                                            className="px-3 py-1 bg-blue-500 text-white rounded"
+                                        >
+                                            ✏️ Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(e.id!)}
+                                            className="px-3 py-1 bg-red-500 text-white rounded"
+                                        >
+                                            🗑 Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                {/* pagination */}
+            </div>
             <div className="flex justify-center items-center space-x-2 py-3">
                 <button
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -224,6 +231,6 @@ export default function EventTable({ data }: Props) {
                 mode={mode}
                 onSave={handleSave}
             />
-        </>
+        </div>
     );
 }
