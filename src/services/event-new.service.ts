@@ -11,14 +11,12 @@ export const getevent = async (): Promise<EventsResponse> => {
 
   const data = await res.json();
 
-  //  validate ให้ตรง schema เสมอ
   const parsed = EventsResponseSchema.safeParse({ events: data });
 
   if (!parsed.success) {
     console.error("Schema validation error:", parsed.error);
-    return []; // fallback
+    return []; 
   }
-  console.log("Parsed data:", parsed.data);
   return parsed.data;
 };
 

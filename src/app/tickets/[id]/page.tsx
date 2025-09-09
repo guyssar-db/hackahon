@@ -53,7 +53,7 @@ export default function TicketPage() {
         
         else{
             alert(`เพิ่ม ${selectedPrice} ในตะกร้าสำเร็จ!`);
-            router.push(`/dashboard/ticket/${id}`)
+            router.push(`/profile/ticket/${id}`)
         }
 
 

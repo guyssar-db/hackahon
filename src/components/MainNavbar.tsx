@@ -106,7 +106,7 @@ export default function MainNavbar() {
                     href="/"
                     className="font-bold text-lg text-white duration-300 ease-in-out"
                 >
-                    navhome
+                    Evenior
                 </Link>
 
                 {/* Nav Desktop */}
@@ -173,6 +173,16 @@ export default function MainNavbar() {
                                             {data?.user.email}
                                         </p>
                                     </div>
+                                    <div className="py-1">
+                                        <MenuItem>
+                                            <a
+                                                href="/profile"
+                                                className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
+                                            >
+                                                Profile
+                                            </a>
+                                        </MenuItem>
+                                    </div>
 
                                     <div className="py-1">
                                         <MenuItem>
@@ -218,9 +228,7 @@ export default function MainNavbar() {
                                             onClick={signUpSubmit}
                                             className="block w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-white/5 hover:text-white"
                                         >
-                                            {loading
-                                                ? 'SignUp…'
-                                                : 'Sign Up'}
+                                            {loading ? 'SignUp…' : 'Sign Up'}
                                         </button>
                                     </MenuItem>
                                 </div>
