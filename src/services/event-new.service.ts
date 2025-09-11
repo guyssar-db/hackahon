@@ -1,48 +1,17 @@
-import {
-    EventsResponseSchema,
-    EventsResponse,
-} from '@/lib/schemas/event.schema';
+import { EventsResponse,Event} from '@/lib/schemas/event.schema';
+import { AxiosResponse } from 'axios';
+import { http } from './http/http.service';
 
-export const getevent = async (): Promise<EventsResponse> => {
-    const res = await fetch('http://54.169.154.143:3082/events', {
-        cache: 'no-store',
-    });
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch events');
-    }
 
-    const data = await res.json();
-
-    const parsed = EventsResponseSchema.safeParse({ events: data });
-
-    if (!parsed.success) {
-        console.error('Schema validation error:', parsed.error);
-        return [];
-    }
-    return parsed.data;
+export const getEvent = async (): Promise<AxiosResponse<EventsResponse>> => {
+    return await http.get('http://54.169.154.143:3082/events')
 };
 
-export const geteventhistory = async (): Promise<EventsResponse> => {
-    const res = await fetch('http://54.169.154.143:3082/events', {
-        cache: 'no-store',
-    });
-
-    if (!res.ok) {
-        throw new Error('Failed to fetch events');
-    }
-
-    const data = await res.json();
-
-    //  validate ให้ตรง schema เสมอ
-    const parsed = EventsResponseSchema.safeParse({ events: data });
-
-    if (!parsed.success) {
-        console.error('Schema validation error:', parsed.error);
-        return []; // fallback
-    }
-    console.log('Parsed data:', parsed.data);
-    return parsed.data;
+export const getEventhistory = async (
+    id?: string,
+): Promise<AxiosResponse<EventsResponse>> => {
+    return await http.get(`http://54.169.154.143:3082/events/${id}`);
 };
 
 export const updateEvent = async (

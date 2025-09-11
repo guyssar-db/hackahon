@@ -7,7 +7,7 @@ export async function getEvents(): Promise<AxiosResponse<Event[]>> {
 }
 
 export async function getEventById(id: number): Promise<AxiosResponse<Event>> {
-    return await http.get<Event>(`${BASE_URL}/${EVENT_URL}/${id}`);
+    return await http.get<Event>(`${EVENT_URL}/${id}`);
 }
 
 export async function createEvent(

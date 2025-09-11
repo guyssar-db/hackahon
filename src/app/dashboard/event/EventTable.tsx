@@ -1,152 +1,164 @@
 'use client';
 
-import { useState } from 'react';
-import { Event } from '@/lib/schemas/event.schema';
+import { memo, useCallback, useMemo, useState, useTransition } from 'react';
+import type { Event } from '@/lib/schemas/event.schema';
 import EventModal from '@/components/EventModal';
 import { updateEvent, deleteEvent } from '@/services/event-new.service';
 
-type Props = {
-    data: Event[];
-};
+type Props = { data: Event[] };
 
-export default function EventTable({ data }: Props) {
+function EventTableBase({ data }: Props) {
     const [events, setEvents] = useState<Event[]>(data ?? []);
     const [page, setPage] = useState(1);
     const pageSize = 5;
-    const totalPages = Math.max(1, Math.ceil(events.length / pageSize));
-    const paginated = events.slice((page - 1) * pageSize, page * pageSize);
 
-    // modal states
-    const [open, setOpen] = useState(false);
-    const [selected, setSelected] = useState<Event | null>(null);
-    const [mode, setMode] = useState<'view' | 'edit'>('view');
+    const [{ open, mode, selected, msg }, setUI] = useState<{
+        open: boolean;
+        mode: 'view' | 'edit';
+        selected: Event | null;
+        msg: { type: 'success' | 'error'; text: string } | null;
+    }>({ open: false, mode: 'view', selected: null, msg: null });
 
-    // loading + message state
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState<{
-        type: 'success' | 'error';
-        text: string;
-    } | null>(null);
+    const [isPending, startTransition] = useTransition();
 
-    const handleDelete = async (id: string) => {
-        try {
-            setLoading(true);
-            await deleteEvent(id);
-            const newEvents = events.filter((e) => e.id !== id);
-            setEvents(newEvents);
+    const totalPages = useMemo(
+        () => Math.max(1, Math.ceil(events.length / pageSize)),
+        [events.length],
+    );
 
-            if ((page - 1) * pageSize >= newEvents.length) {
-                setPage(Math.max(1, page - 1)); // ✅ กันหน้าเปล่า
+    const paginated = useMemo(
+        () => events.slice((page - 1) * pageSize, page * pageSize),
+        [events, page],
+    );
+
+    const toast = useCallback(
+        (type: 'success' | 'error', text: string) =>
+            setUI((s) => ({ ...s, msg: { type, text } })),
+        [],
+    );
+
+    const openModal = useCallback(
+        (nextMode: 'view' | 'edit', ev: Event) =>
+            setUI((s) => ({ ...s, open: true, mode: nextMode, selected: ev })),
+        [],
+    );
+
+    const closeModal = useCallback(
+        () => setUI((s) => ({ ...s, open: false, selected: null })),
+        [],
+    );
+
+    const handleDelete = useCallback(
+        (id: string) => {
+            startTransition(async () => {
+                try {
+                    await deleteEvent(id);
+                    setEvents((prev) => {
+                        const next = prev.filter((e) => e.id !== id);
+                        setPage((p) =>
+                            Math.min(
+                                Math.max(1, p),
+                                Math.max(1, Math.ceil(next.length / pageSize)),
+                            ),
+                        );
+                        return next;
+                    });
+                    toast('success', '🗑 Event deleted successfully!');
+                } catch (e) {
+                    console.error('Delete failed:', e);
+                    toast('error', '❌ Delete failed');
+                }
+            });
+        },
+        [toast],
+    );
+
+    const handleSave = useCallback(
+        (updated: Event) => {
+            if (!updated?.id) {
+                toast('error', '❌ Event ID is missing');
+                return;
             }
-
-            setMessage({
-                type: 'success',
-                text: '🗑 Event deleted successfully!',
+            startTransition(async () => {
+                try {
+                    const saved = await updateEvent(updated.id!, updated);
+                    setEvents((prev) =>
+                        prev.map((e) =>
+                            e.id === updated.id ? { ...e, ...saved } : e,
+                        ),
+                    );
+                    toast('success', '💾 Event updated successfully!');
+                    closeModal();
+                } catch (e) {
+                    console.error('Update failed:', e);
+                    toast('error', '❌ Update failed');
+                }
             });
-        } catch (error) {
-            console.error('Delete failed:', error);
-            setMessage({ type: 'error', text: '❌ Delete failed' });
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleEdit = (event: Event) => {
-        setSelected(event);
-        setMode('edit');
-        setOpen(true);
-    };
-
-    const handleView = (event: Event) => {
-        setSelected(event);
-        setMode('view');
-        setOpen(true);
-    };
-
-    const handleSave = async (updated: Event) => {
-        if (!updated.id) {
-            console.error('Event ID is missing!');
-            setMessage({ type: 'error', text: '❌ Event ID is missing' });
-            return;
-        }
-
-        try {
-            setLoading(true);
-            const saved = await updateEvent(updated.id, updated);
-            setEvents(events.map((e) => (e.id === updated.id ? saved : e)));
-            setMessage({
-                type: 'success',
-                text: '💾 Event updated successfully!',
-            });
-        } catch (err) {
-            console.error('Update failed:', err);
-            setMessage({ type: 'error', text: '❌ Update failed' });
-        } finally {
-            setLoading(false);
-        }
-    };
+        },
+        [toast, closeModal],
+    );
 
     return (
-        <div className="w-full overflow-hidden overflow-x-scroll hide-scrollbar">
-            <div className="w-full shadow-lg rounded-lg overflow-hidden overflow-x-scroll hide-scrollbar">
-                {/* Toast */}
-                {message && (
-                    <div
-                        className={`fixed top-4 right-4 px-4 py-2 rounded shadow-lg text-white ${
-                            message.type === 'success'
-                                ? 'bg-green-500'
-                                : 'bg-red-500'
-                        }`}
-                    >
-                        {message.text}
-                    </div>
-                )}
+        <div className="w-full overflow-x-auto hide-scrollbar">
+            {msg && (
+                <div
+                    className={`fixed top-4 right-4 px-4 py-2 rounded shadow-lg text-white ${
+                        msg.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                    }`}
+                >
+                    {msg.text}
+                </div>
+            )}
 
-                {loading && (
-                    <div className="text-center py-2 text-blue-600">
-                        ⏳ Processing...
-                    </div>
-                )}
+            {isPending && (
+                <div className="text-center py-2 text-blue-600">
+                    ⏳ Processing...
+                </div>
+            )}
 
-                <table className="w-full table-auto bg-white shadow-md rounded-lg border border-gray-200 ">
-                    <thead>
-                        <tr className="bg-gray-100">
-                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                                ID
+            <table className="w-full table-auto bg-white shadow-md rounded-lg border border-gray-200">
+                <thead>
+                    <tr className="bg-gray-100 text-left">
+                        {[
+                            'ID',
+                            'Image',
+                            'Event Title',
+                            'Description',
+                            'Date',
+                            'Category',
+                            'Actions',
+                        ].map((h) => (
+                            <th
+                                key={h}
+                                className="py-4 px-6 text-gray-600 font-bold uppercase"
+                            >
+                                {h}
                             </th>
-                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                                Image
-                            </th>
-                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                                Event Title
-                            </th>
-                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                                Description
-                            </th>
-                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                                Date
-                            </th>
-                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                                Category
-                            </th>
-                            <th className="py-4 px-6 text-left text-gray-600 font-bold uppercase">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginated.map((e) => (
-                            <tr key={e.id} className="text-center border-b">
-                                {/* ID */}
-                                <td className="py-4 px-6">{e.id}</td>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {paginated.map((e) => {
+                        const {
+                            id,
+                            title,
+                            description,
+                            schedule,
+                            category,
+                            images,
+                        } = e;
+                        const { thumbnail } = images ?? {};
+                        const { startDate } = schedule ?? {};
 
-                                {/* ✅ Image column */}
+                        return (
+                            <tr key={id} className="border-b">
+                                <td className="py-4 px-6">{id}</td>
                                 <td className="py-4 px-6">
-                                    {e.images?.thumbnail ? (
+                                    {thumbnail ? (
                                         <img
-                                            src={e.images.thumbnail}
-                                            alt={e.title ?? 'Event'}
-                                            className="w-16 h-16 rounded-md object-cover mx-auto"
+                                            src={thumbnail}
+                                            alt={title ?? 'Event'}
+                                            className="w-16 h-16 rounded-md object-cover"
                                         />
                                     ) : (
                                         <span className="text-gray-400">
@@ -154,42 +166,30 @@ export default function EventTable({ data }: Props) {
                                         </span>
                                     )}
                                 </td>
-
-                                {/* Title */}
-                                <td className="py-4 px-6 text-gray-800 font-medium">
-                                    {e.title}
+                                <td className="py-4 px-6 font-medium text-gray-800">
+                                    {title}
                                 </td>
-
-                                {/* Description */}
-                                <td className="py-4 px-6">{e.description}</td>
-
-                                {/* Date */}
+                                <td className="py-4 px-6">{description}</td>
                                 <td className="py-4 px-6">
-                                    {e.schedule?.startDate ?? '-'}
+                                    {startDate ?? '-'}
                                 </td>
-
-                                {/* Category */}
+                                <td className="py-4 px-6">{category ?? '-'}</td>
                                 <td className="py-4 px-6">
-                                    {e.category ?? '-'}
-                                </td>
-
-                                {/* Actions */}
-                                <td className="py-4 px-6">
-                                    <div className="flex justify-center gap-2">
+                                    <div className="flex gap-2">
                                         <button
-                                            onClick={() => handleView(e)}
+                                            onClick={() => openModal('view', e)}
                                             className="px-3 py-1 bg-gray-500 text-white rounded"
                                         >
                                             👀 View
                                         </button>
                                         <button
-                                            onClick={() => handleEdit(e)}
+                                            onClick={() => openModal('edit', e)}
                                             className="px-3 py-1 bg-blue-500 text-white rounded"
                                         >
                                             ✏️ Edit
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(e.id!)}
+                                            onClick={() => handleDelete(id!)}
                                             className="px-3 py-1 bg-red-500 text-white rounded"
                                         >
                                             🗑 Delete
@@ -197,13 +197,23 @@ export default function EventTable({ data }: Props) {
                                     </div>
                                 </td>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        );
+                    })}
 
-                {/* pagination */}
-            </div>
-            <div className="flex justify-center items-center space-x-2 py-3">
+                    {paginated.length === 0 && (
+                        <tr>
+                            <td
+                                className="py-8 text-center text-gray-500"
+                                colSpan={7}
+                            >
+                                No events
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+
+            <div className="flex justify-center items-center gap-2 py-3">
                 <button
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
@@ -223,10 +233,9 @@ export default function EventTable({ data }: Props) {
                 </button>
             </div>
 
-            {/* modal */}
             <EventModal
                 open={open}
-                onClose={() => setOpen(false)}
+                onClose={closeModal}
                 event={selected}
                 mode={mode}
                 onSave={handleSave}
@@ -234,3 +243,6 @@ export default function EventTable({ data }: Props) {
         </div>
     );
 }
+
+const EventTable = memo(EventTableBase);
+export default EventTable;
