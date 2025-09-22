@@ -1,11 +1,9 @@
-import { EventsResponse,Event} from '@/lib/schemas/event.schema';
+import { EventsResponse, Event } from '@/lib/schemas/event.schema';
 import { AxiosResponse } from 'axios';
 import { http } from './http/http.service';
 
-
-
 export const getEvent = async (): Promise<AxiosResponse<EventsResponse>> => {
-    return await http.get('http://54.169.154.143:3082/events')
+    return await http.get('http://54.169.154.143:3082/events');
 };
 
 export const getEventhistory = async (

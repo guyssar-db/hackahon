@@ -1,9 +1,66 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import LayoutMain from '@/layouts/LayoutMain';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 
 type OrderStatus = 'pending' | 'paid';
+
+type Payment = {
+    pricing: string;
+    status: OrderStatus;
+    created_at: string;
+    channel: string;
+};
+
+type Order = {
+    event_id: string;
+    title: string;
+    payment: Payment[];
+    dateLabel: string;
+};
+
+const MOCK_ORDERS: Order[] = [
+    {
+        event_id: 'd0c6',
+        title: 'Digital Marketing Masterclass 2025',
+        payment: [
+            {
+                pricing: '2000 THB',
+                status: 'pending',
+                created_at: '2025-09-01T10:00:00Z',
+                channel: 'credit_card',
+            },
+        ],
+        dateLabel: '15-17 ต.ค. 2025',
+    },
+    {
+        event_id: 'evt_007',
+        title: 'Thailand Tech Conference 2025',
+        payment: [
+            {
+                pricing: '3500 THB',
+                status: 'paid',
+                created_at: '2025-09-02T15:00:00Z',
+                channel: 'bank_transfer',
+            },
+        ],
+        dateLabel: '5-7 พ.ย. 2025',
+    },
+    {
+        event_id: 'evt_008',
+        title: 'Jazz Under the Stars',
+        payment: [
+            {
+                pricing: '3500 THB',
+                status: 'paid',
+                created_at: '2025-12-02T15:00:00Z',
+                channel: 'bank_transfer',
+            },
+        ],
+        dateLabel: '12 ธ.ค. 2025',
+    },
+];
 
 const formatThai = (iso: string) =>
     new Intl.DateTimeFormat('th-TH-u-ca-gregory', {
@@ -12,70 +69,32 @@ const formatThai = (iso: string) =>
         timeZone: 'Asia/Bangkok',
     }).format(new Date(iso));
 
-export default function TicketPage() {
+export default function TicketPageClient() {
     const { id } = useParams<{ id: string }>();
     const router = useRouter();
     const query = useSearchParams();
 
-    // query จากหน้าก่อนหน้า
-    const from = query.get('from') || '/profile';
-    const tab = query.get('tab') || 'orders';
-    const statusFilter = query.get('status') || '';
+    const [ticket, setTicket] = useState<Order | null>(null);
+    const [statusFilter, setStatusFilter] = useState<string>('');
+    const [tab, setTab] = useState('orders');
+    const [from, setFrom] = useState('/profile');
 
-    // --- MOCK เดิม (ให้ตรงกับหน้า profile) ---
-    const orders = [
-        {
-            event_id: 'd0c6',
-            title: 'Digital Marketing Masterclass 2025',
-            payment: [
-                {
-                    pricing: '2000 THB',
-                    status: 'pending' as OrderStatus,
-                    created_at: '2025-09-01T10:00:00Z',
-                    channel: 'credit_card',
-                },
-            ],
-            dateLabel: '15-17 ต.ค. 2025',
-        },
-        {
-            event_id: 'evt_007',
-            title: 'Thailand Tech Conference 2025',
-            payment: [
-                {
-                    pricing: '3500 THB',
-                    status: 'paid' as OrderStatus,
-                    created_at: '2025-09-02T15:00:00Z',
-                    channel: 'bank_transfer',
-                },
-            ],
-            dateLabel: '5-7 พ.ย. 2025',
-        },
-        {
-            event_id: 'evt_008',
-            title: 'Jazz Under the Stars',
-            payment: [
-                {
-                    pricing: '3500 THB',
-                    status: 'paid' as OrderStatus,
-                    created_at: '2025-12-02T15:00:00Z',
-                    channel: 'bank_transfer',
-                },
-            ],
-            dateLabel: '12 ธ.ค. 2025',
-        },
-    ];
+    // initialize client-only state
+    useEffect(() => {
+        const found =
+            MOCK_ORDERS.find((o) => o.event_id === String(id)) || null;
+        setTicket(found);
 
-    // หา ticket ตาม id
-    const found = orders.find((o) => o.event_id === String(id));
-    const p = found?.payment[0];
+        const fromParam = query.get('from') || '/profile';
+        setFrom(fromParam.startsWith('/') ? fromParam : '/profile');
 
-    // ถ้าไม่เจอ ใช้ fallback ง่าย ๆ
-    const title = found?.title ?? String(id);
-    const dateText = found?.dateLabel ?? '-';
-    const statusText = p?.status === 'paid' ? 'จ่ายแล้ว' : 'ยังไม่จ่าย';
-    const isPaid = p?.status === 'paid';
+        setTab(query.get('tab') || 'orders');
+        setStatusFilter(query.get('status') || '');
+    }, [id, query]);
 
     const goBack = () => {
+        if (typeof window === 'undefined') return;
+
         if (query.has('from')) {
             const url = new URL(from, window.location.origin);
             url.searchParams.set('tab', tab);
@@ -87,16 +106,22 @@ export default function TicketPage() {
     };
 
     const pay = () => {
-        if (isPaid) return;
+        if (!ticket?.payment[0] || ticket.payment[0].status === 'paid') return;
         alert('จ่ายเงินแล้ว (เดโม่)');
         goBack();
     };
 
     const cancelOrder = () => {
-        if (isPaid) return;
+        if (!ticket?.payment[0] || ticket.payment[0].status === 'paid') return;
         alert('ยกเลิกคำสั่งซื้อแล้ว (เดโม่)');
         goBack();
     };
+
+    const p = ticket?.payment[0];
+    const isPaid = p?.status === 'paid';
+    const title = ticket?.title ?? String(id);
+    const dateText = ticket?.dateLabel ?? '-';
+    const statusText = isPaid ? 'จ่ายแล้ว' : 'ยังไม่จ่าย';
 
     return (
         <LayoutMain>
@@ -109,13 +134,13 @@ export default function TicketPage() {
 
                     {/* Info */}
                     <div className="space-y-2 text-gray-800">
-                        <p className="text-base">
+                        <p>
                             <span className="font-semibold text-gray-700">
                                 วันที่:
                             </span>{' '}
                             {dateText}
                         </p>
-                        <p className="text-base">
+                        <p>
                             <span className="font-semibold text-gray-700">
                                 สถานะ:
                             </span>{' '}
@@ -130,7 +155,7 @@ export default function TicketPage() {
                             </span>
                         </p>
                         {p?.pricing && (
-                            <p className="text-base">
+                            <p>
                                 <span className="font-semibold text-gray-700">
                                     ราคา:
                                 </span>{' '}
@@ -161,7 +186,6 @@ export default function TicketPage() {
                         >
                             ย้อนกลับ
                         </button>
-
                         {!isPaid && (
                             <>
                                 <button

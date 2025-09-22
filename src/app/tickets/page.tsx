@@ -1,35 +1,26 @@
 import LayoutMain from '@/layouts/LayoutMain';
 import EventList from '@/components/ui/EventList';
 import type { Event } from '@/components/ui/EventList';
+import { getEvent } from '@/services/event-new.service';
 
-async function getEvents(): Promise<Event[]> {
-    const res = await fetch('http://54.169.154.143:3082/events');
-    const data = await res.json();
+const getEvents = async (): Promise<Event[]> => {
+    try {
+        const res = await getEvent();
+        const data = res.data as Event[];
 
-    return data.map((e: any) => ({
-        id: e.id,
-        title: e.title,
-        description: e.description,
-        category: e.category,
-        status: e.status,
-        organizer: e.organizer,
-        schedule: e.schedule,
-        location: e.location,
-        pricing: e.pricing,
-        capacity: e.capacity,
-        images: e.images,
-        tags: e.tags,
-        requirements: e.requirements || [],
-        includes: e.includes || [],
-        tracks: e.tracks || [],
-        activities: e.activities || [],
-        speakers: e.speakers || [],
-        artists: e.artists || [],
-    }));
-}
+        return data.map(
+            (e): Event => ({
+                ...e,
+            }),
+        );
+    } catch (error) {
+        console.error('Failed to fetch events', error);
+        return [];
+    }
+};
 
 export default async function EventsPage() {
-    const events = await getEvents();
+    const events: Event[] = await getEvents();
 
     return (
         <LayoutMain>

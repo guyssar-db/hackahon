@@ -30,8 +30,6 @@ export default function MainNavbar() {
         }
     }, []);
 
-    console.log(data?.user);
-
     const signInSubmit = async () => {
         try {
             setLoading(true);
